@@ -12,7 +12,7 @@ Before contributing, I would suggest reading the three following articles from t
 
 To get the project running:
 
-- Set up a cross-compiler targeting `x86_64-elf`
+- Install the tools listed in the README
 - Use an emulator (e.g., QEMU)
 - Clone the repo and start exploring
 
