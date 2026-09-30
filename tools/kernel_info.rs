@@ -1,19 +1,15 @@
 use std::process::Command;
 use std::io;
+use std::fs;
 
 fn main() {
-    // Run `ls -l build/kernel.bin`
-    match run_command("ls", &["-l", "build/kernel.bin"]) {
-        Ok(out) => {
-            let size = out.split_whitespace().nth(4).unwrap_or("0");
-            let size: u64 = size.parse().unwrap();
-            println!("Size of kernel.bin: {} bytes", size)
-        }
-        Err(e) => eprintln!("Error running 'ls': {}", e),
+    match fs::metadata("build/kernel.elf") {
+        Ok(meta) => println!("Size of kernel.elf: {} bytes", meta.len()),
+        Err(e) => eprintln!("Error reading 'build/kernel.elf': {}", e),
     }
 
-    // Run `x86_64-elf-readelf -h build/kernel.elf | grep "Entry point"`
-    match run_command("x86_64-elf-readelf", &["-h", "build/kernel.elf"]) {
+    // Run `readelf -h build/kernel.elf | grep "Entry point"`
+    match run_command("readelf", &["-h", "build/kernel.elf"]) {
         Ok(out) => {
             if let Some(entry_point) = out.lines()
                 .find(|line| line.contains("Entry point")) {
@@ -22,11 +18,11 @@ fn main() {
                 eprintln!("Entry point not found in the ELF file.");
             }
         },
-        Err(e) => eprintln!("Error running 'x86_64-elf-readelf': {}", e),
+        Err(e) => eprintln!("Error running 'readelf': {}", e),
     }
 
-    // Run `x86_64-elf-nm build/kernel.elf | grep kmain`
-    match run_command("x86_64-elf-nm", &["build/kernel.elf"]) {
+    // Run `nm build/kernel.elf | grep kmain`
+    match run_command("nm", &["build/kernel.elf"]) {
         Ok(out) => {
             if let Some(kernel_main) = out.lines()
                 .find(|line| line.contains("kmain")) {
@@ -35,27 +31,15 @@ fn main() {
                 eprintln!("kmain symbol not found.");
             }
         },
-        Err(e) => eprintln!("Error running 'x86_64-elf-nm': {}", e),
+        Err(e) => eprintln!("Error running 'nm': {}", e),
     }
 
-    // Run `ls -l build/*.bin | awk '{sum += $5} END {print sum, "bytes used"}`
-    match run_command("ls", &["-l", "build/*.bin"]) {
-        Ok(out) => {
-            let total_size: u64 = out.lines()
-                .filter_map(|line| line.split_whitespace().nth(4))
-                .filter_map(|s| s.parse::<u64>().ok())
-                .sum();
-            println!("Total size of .bin files: {} bytes", total_size)
-        },
-        Err(e) => eprintln!("Error running 'ls' on .bin files: {}", e),
-    }
-
-    // Run `x86_64-elf-nm build/kernel.elf`
-    match run_command("x86_64-elf-nm", &["build/kernel.elf"]) {
+    // Run `nm build/kernel.elf`
+    match run_command("nm", &["build/kernel.elf"]) {
         Ok(out) => {
             println!("Symbols in kernel.elf:\n{}", out);
         }
-        Err(e) => eprintln!("Error running 'x86_64-elf-nm': {}", e),
+        Err(e) => eprintln!("Error running 'nm': {}", e),
     }
 }
 
