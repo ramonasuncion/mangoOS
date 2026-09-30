@@ -77,3 +77,18 @@ void serial_write_hex(u64 value)
 
   serial_write(buffer + pos - 2);
 }
+
+void serial_write_dec(u64 value)
+{
+  char buffer[21];
+  int pos = 20;
+
+  buffer[20] = '\0';
+
+  do {
+    buffer[--pos] = '0' + value % 10;
+    value /= 10;
+  } while (value > 0);
+
+  serial_write(buffer + pos);
+}

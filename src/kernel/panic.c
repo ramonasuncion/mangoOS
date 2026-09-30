@@ -8,7 +8,7 @@ void __attribute__((noreturn)) _panic(const char *message, const char *file, u32
   serial_write("PANIC at ");
   serial_write(file);
   serial_write(":");
-  serial_write_hex(line);
+  serial_write_dec(line);
   serial_write(": ");
   serial_write_line(message);
 
