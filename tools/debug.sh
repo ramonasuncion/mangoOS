@@ -6,10 +6,10 @@
 cd "$SRC_DIR"
 
 SESSION=debug-os
-GDB_PATH="$HOME/opt/cross/bin/x86_64-elf-gdb"
+GDB_PATH=gdb
 tmux new-session -d -s "$SESSION" "make clean && make debug"
-tmux split-window -h -t "$SESSION"
-tmux send-keys -t "$SESSION".1 "$GDB_PATH $BUILD_DIR/kernel.elf" C-m
+GDB_PANE=$(tmux split-window -h -t "$SESSION" -P -F '#{pane_id}')
+tmux send-keys -t "$GDB_PANE" "$GDB_PATH -iex \"add-auto-load-safe-path $SRC_DIR/.gdbinit\" $BUILD_DIR/kernel.elf" C-m
 tmux attach-session -t "$SESSION"
 cd -
 

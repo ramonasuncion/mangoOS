@@ -24,7 +24,7 @@ export OS_NAME
 
 PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SRC_DIR="$PROJECT_ROOT/src"
-BUILD_DIR="$PROJECT_ROOT/build"
+BUILD_DIR="$SRC_DIR/build"
 TOOLS_DIR="$PROJECT_ROOT/tools"
 OS_NAME="mango"
 
