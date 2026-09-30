@@ -53,7 +53,7 @@ xorriso -as mkisofs -R -r -J -b boot/limine/limine-bios-cd.bin \
         "$ISO_ROOT" -o "$ISO_FILE"
 
 if [ -x "$BOOTLOADER_DIR/limine" ] && [ "${SKIP_LIMINE_INSTALL:-0}" = "0" ]; then
-    "$BOOTLOADER_DIR/limine" bios-install "$ISO_FILE"
+    "$BOOTLOADER_DIR/limine" bios-install --quiet "$ISO_FILE"
 fi
 
 
