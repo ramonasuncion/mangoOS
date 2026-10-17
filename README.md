@@ -3,7 +3,7 @@
 A hobby osdev project. I intend to develop a x64 monolithic OS.
 
 > [!NOTE]
-> Once [Ripe](https://github.com/ramonasuncion/ripe), a systems language I'm building, is mature enough, I plan to rewrite mangoOS in it.
+> Once [Ripe](https://github.com/ripe-lang/ripe), a systems language I'm building, is mature enough, I plan to rewrite mangoOS in it.
 
 ## Demo
 
